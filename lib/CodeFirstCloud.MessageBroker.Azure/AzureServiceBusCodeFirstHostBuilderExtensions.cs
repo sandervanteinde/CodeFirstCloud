@@ -13,12 +13,12 @@ namespace CodeFirstCloud;
 
 public static class AzureServiceBusCodeFirstHostBuilderExtensions
 {
-    public static void AddAzureServiceBusMessageHandlersFromEntryAssembly(this ICodeFirstHostBuilder builder, string serviceBusName)
+    public static ICodeFirstCloudHostBuilder AddAzureServiceBusMessageHandlersFromEntryAssembly(this ICodeFirstCloudHostBuilder builder, string serviceBusName)
     {
-        builder.AddAzureServiceBusMessageHandlerFromAssembly(Assembly.GetEntryAssembly()!, serviceBusName);
+        return builder.AddAzureServiceBusMessageHandlerFromAssembly(Assembly.GetEntryAssembly()!, serviceBusName);
     }
 
-    public static void AddAzureServiceBusMessageHandlerFromAssembly(this ICodeFirstHostBuilder builder, Assembly assembly, string serviceBusName)
+    public static ICodeFirstCloudHostBuilder AddAzureServiceBusMessageHandlerFromAssembly(this ICodeFirstCloudHostBuilder builder, Assembly assembly, string serviceBusName)
     {
         builder.Services
            .AddAzureClients(builder =>
@@ -37,5 +37,7 @@ public static class AzureServiceBusCodeFirstHostBuilderExtensions
         }
 
         builder.Services.TryAddSingleton<TokenCredential, DefaultAzureCredential>();
+
+        return builder;
     }
 }

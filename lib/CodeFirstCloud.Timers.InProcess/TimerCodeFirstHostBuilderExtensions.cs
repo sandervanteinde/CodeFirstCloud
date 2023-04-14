@@ -1,5 +1,6 @@
 ﻿using CodeFirstCloud.AssemblyScanningExtensions;
 using CodeFirstCloud.Timers;
+using CodeFirstCloud.Timers.InProcess;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -8,7 +9,7 @@ namespace CodeFirstCloud;
 
 public static class TimerCodeFirstHostBuilderExtensions
 {
-    public static ICodeFirstHostBuilder AddTimerHandlerFromEntryAssembly(this ICodeFirstHostBuilder builder)
+    public static ICodeFirstCloudHostBuilder AddTimerHandlerFromEntryAssembly(this ICodeFirstCloudHostBuilder builder)
     {
         var entryAssembly = Assembly.GetEntryAssembly()
                             ?? throw new InvalidOperationException("No entry assembly found");

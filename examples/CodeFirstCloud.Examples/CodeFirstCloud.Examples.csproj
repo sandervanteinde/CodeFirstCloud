@@ -9,12 +9,11 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\lib\CodeFirstCloud.AssemblyScanningExtensions\CodeFirstCloud.AssemblyScanningExtensions.csproj" />
-      <ProjectReference Include="..\..\lib\CodeFirstCloud.Core.Abstractions\CodeFirstCloud.Core.Abstractions.csproj" />
       <ProjectReference Include="..\..\lib\CodeFirstCloud.Core\CodeFirstCloud.Core.csproj" />
+      <ProjectReference Include="..\..\lib\CodeFirstCloud.DevelopmentSwashbuckle\CodeFirstCloud.DevelopmentSwashbuckle.csproj" />
       <ProjectReference Include="..\..\lib\CodeFirstCloud.MessageBroker.Azure\CodeFirstCloud.MessageBroker.Azure.csproj" />
       <ProjectReference Include="..\..\lib\CodeFirstCloud.MessageBroker.RabbitMQ\CodeFirstCloud.MessageBroker.RabbitMQ.csproj" />
-      <ProjectReference Include="..\..\lib\CodeFirstCloud.MessageBroker\CodeFirstCloud.MessageBroker.csproj" />
-      <ProjectReference Include="..\..\lib\CodeFirstCloud.Timers\CodeFirstCloud.Timers.csproj" />
+      <ProjectReference Include="..\..\lib\CodeFirstCloud.Timers.InProcess\CodeFirstCloud.Timers.InProcess.csproj" />
     </ItemGroup>
 
 </Project>

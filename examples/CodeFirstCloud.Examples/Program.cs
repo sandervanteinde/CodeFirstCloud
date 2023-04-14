@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 
 var host = CodeFirstCloudHost.Create(builder =>
     builder.AddTimerHandlerFromEntryAssembly()
-       .AddAzureServiceBusMessageHandlersFromEntryAssembly("sander-testing-servicebus"));
+       .AddAzureServiceBusMessageHandlersFromEntryAssembly("sander-testing-servicebus")
+       .AddDevelopmentSwagger());
 
 await host.RunAsync();

@@ -5,12 +5,12 @@ namespace CodeFirstCloud.MessageBroker.RabbitMQ;
 
 public static class RabbitMqCodeFirstHostBuilderExtensions
 {
-    public static void AddLocalHostRabbitMqHandlersFromEntryAssembly(this ICodeFirstHostBuilder builder)
+    public static void AddLocalHostRabbitMqHandlersFromEntryAssembly(this ICodeFirstCloudHostBuilder builder)
     {
         builder.AddLocalHostRabbitMqHandlers(Assembly.GetEntryAssembly()!);
     }
 
-    public static void AddLocalHostRabbitMqHandlers(this ICodeFirstHostBuilder builder, Assembly assembly)
+    public static void AddLocalHostRabbitMqHandlers(this ICodeFirstCloudHostBuilder builder, Assembly assembly)
     {
         var services = builder.Services;
         services.TryAddSingleton<RabbitMqConnection>();

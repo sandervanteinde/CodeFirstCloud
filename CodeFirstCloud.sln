@@ -28,6 +28,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		lib\Directory.Build.props = lib\Directory.Build.props
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeFirstCloud.DevelopmentSwashbuckle", "lib\CodeFirstCloud.DevelopmentSwashbuckle\CodeFirstCloud.DevelopmentSwashbuckle.csproj", "{EEF37961-5227-4DE6-829C-92EF8FAFDD7C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeFirstCloud.Timers.InProcess", "lib\CodeFirstCloud.Timers.InProcess\CodeFirstCloud.Timers.InProcess.csproj", "{295DE454-1307-4CF7-A281-292D9788F21B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +73,14 @@ Global
 		{83C233A5-4130-4B6B-A36C-FBC607627D03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83C233A5-4130-4B6B-A36C-FBC607627D03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83C233A5-4130-4B6B-A36C-FBC607627D03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEF37961-5227-4DE6-829C-92EF8FAFDD7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEF37961-5227-4DE6-829C-92EF8FAFDD7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEF37961-5227-4DE6-829C-92EF8FAFDD7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEF37961-5227-4DE6-829C-92EF8FAFDD7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{295DE454-1307-4CF7-A281-292D9788F21B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{295DE454-1307-4CF7-A281-292D9788F21B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{295DE454-1307-4CF7-A281-292D9788F21B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{295DE454-1307-4CF7-A281-292D9788F21B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{25C430B6-F959-407D-AC4E-56BD05903547} = {9F80F3A5-7454-4A10-A421-01E951AB89EA}
@@ -79,5 +91,7 @@ Global
 		{2553FF6D-631E-4D25-9086-BDFEFFFF91BA} = {9F80F3A5-7454-4A10-A421-01E951AB89EA}
 		{24C65CFF-8AFD-46FF-8F39-971DA04215AB} = {6A9D5492-A703-41BE-801C-E90857CB89FC}
 		{83C233A5-4130-4B6B-A36C-FBC607627D03} = {9F80F3A5-7454-4A10-A421-01E951AB89EA}
+		{EEF37961-5227-4DE6-829C-92EF8FAFDD7C} = {9F80F3A5-7454-4A10-A421-01E951AB89EA}
+		{295DE454-1307-4CF7-A281-292D9788F21B} = {9F80F3A5-7454-4A10-A421-01E951AB89EA}
 	EndGlobalSection
 EndGlobal

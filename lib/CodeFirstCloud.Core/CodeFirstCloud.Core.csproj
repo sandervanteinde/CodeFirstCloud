@@ -5,10 +5,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\CodeFirstCloud.Core.Abstractions\CodeFirstCloud.Core.Abstractions.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+        <ProjectReference Include="..\CodeFirstCloud.Core.Abstractions\CodeFirstCloud.Core.Abstractions.csproj" />
     </ItemGroup>
 </Project>

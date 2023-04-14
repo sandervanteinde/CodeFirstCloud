@@ -4,14 +4,15 @@ using System.Reflection;
 
 namespace CodeFirstCloud;
 
-public class CodeFirstHostBuilder : ICodeFirstHostBuilder
+public class CodeFirstCloudHostBuilder : ICodeFirstCloudHostBuilder
 {
     private readonly WebApplicationBuilder _hostBuilder;
     private readonly Lazy<MethodInfo> _untypedAddBindingGenericMethod;
+    internal List<Action<WebApplication>> MiddlewareRegistrations { get; } = new();
 
     public IServiceCollection Services => _hostBuilder.Services;
 
-    internal CodeFirstHostBuilder(WebApplicationBuilder hostApplicationHostBuilder)
+    internal CodeFirstCloudHostBuilder(WebApplicationBuilder hostApplicationHostBuilder)
     {
         _hostBuilder = hostApplicationHostBuilder;
         _untypedAddBindingGenericMethod = new Lazy<MethodInfo>(() =>
@@ -34,5 +35,10 @@ public class CodeFirstHostBuilder : ICodeFirstHostBuilder
     {
         _hostBuilder.Services.AddTransient<TBinding>();
         _hostBuilder.Services.AddHostedService<HandlerBindingRunner<TBinding>>();
+    }
+
+    public void Use(Action<WebApplication> appRegistration)
+    {
+        MiddlewareRegistrations.Add(appRegistration);
     }
 }
