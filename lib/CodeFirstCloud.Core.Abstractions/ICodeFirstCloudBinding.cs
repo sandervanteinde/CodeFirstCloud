@@ -11,5 +11,5 @@ public interface ICodeFirstCloudBinding
 
 public interface IInvokableInDevelopment
 {
-    abstract static void AddEndpoint(WebApplication app);
+    static abstract void AddEndpoint(WebApplication app);
 }

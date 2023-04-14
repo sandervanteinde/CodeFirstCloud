@@ -61,7 +61,7 @@ internal class HandlerBindingRunner<TBinding> : BackgroundService
 
         if (_runningBinding is not null)
         {
-            await _runningBinding.StartAsync(cancellationToken);
+            await _runningBinding.StopAsync(cancellationToken);
         }
 
         if (_scope is not null)
