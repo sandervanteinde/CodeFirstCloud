@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <PackageReference Include="RabbitMQ.Client" Version="6.5.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\CodeFirstCloud.Core.Abstractions\CodeFirstCloud.Core.Abstractions.csproj"/>
+        <ProjectReference Include="..\CodeFirstCloud.MessageBroker\CodeFirstCloud.MessageBroker.csproj"/>
+    </ItemGroup>
+
+</Project>
