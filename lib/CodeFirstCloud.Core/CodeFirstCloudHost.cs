@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using CodeFirstCloud.Interceptors;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace CodeFirstCloud;
@@ -12,6 +14,11 @@ public static class CodeFirstCloudHost
 
         var codeFirstHostBuilder = new CodeFirstCloudHostBuilder(builder);
         codeFirstHostBuilderFn.Invoke(codeFirstHostBuilder);
+        builder.Services.AddTransient(typeof(ICodeFirstCloudHandlerPipeline<>), typeof(DefaultCodeFirstCloudHandlerPipeline<>));
+        builder.Services.AddTransient(typeof(ICodeFirstCloudHandlerPipeline<,>), typeof(DefaultCodeFirstCloudHandlerPipeline<,>));
+        builder.Services.AddTransient(typeof(ICodeFirstCloudHandlerPipeline<,,>), typeof(DefaultCodeFirstCloudHandlerPipeline<,,>));
+        builder.Services.AddTransient(typeof(ICodeFirstCloudHandlerPipeline<,,,>), typeof(DefaultCodeFirstCloudHandlerPipeline<,,,>));
+        codeFirstHostBuilder.AddBindingInterceptor<ExceptionBindingInterceptor>();
 
         var app = builder.Build();
 

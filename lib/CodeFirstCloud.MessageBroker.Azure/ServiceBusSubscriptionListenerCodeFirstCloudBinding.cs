@@ -1,6 +1,5 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
@@ -22,7 +21,8 @@ internal sealed class ServiceBusSubscriptionListenerCodeFirstCloudBinding<THandl
         IServiceProvider serviceProvider,
         ServiceBusClient serviceBusClient,
         ServiceBusAdministrationClient serviceBusAdministrationClient,
-        ILogger<THandler> logger)
+        ILogger<THandler> logger
+    )
     {
         var attr = typeof(THandler)
                       .GetCustomAttribute<ServiceBusHandlerAttribute>()
@@ -93,8 +93,8 @@ internal sealed class ServiceBusSubscriptionListenerCodeFirstCloudBinding<THandl
     private async Task ProcessorOnProcessMessageAsync(ProcessMessageEventArgs arg)
     {
         using var scope = _serviceProvider.CreateScope();
-        var handler = scope.ServiceProvider.GetRequiredService<THandler>();
-        var message = new AzureServiceBusMessage(arg.Message);
-        await handler.ProcessMessageAsync(message, arg.CancellationToken);
+        var handler = scope.ServiceProvider.GetRequiredService<ICodeFirstCloudHandlerPipeline<THandler, IServiceBusMessage>>();
+        IServiceBusMessage message = new AzureServiceBusMessage(arg.Message);
+        await handler.HandleAsync(message, arg.CancellationToken);
     }
 }

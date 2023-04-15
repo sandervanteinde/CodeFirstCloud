@@ -90,8 +90,8 @@ internal class RabbitMqBinding<THandler> : ICodeFirstCloudBinding, IDisposable
     private async Task ProcessMessageAsync(BasicDeliverEventArgs basicDeliverEventArgs)
     {
         using var sp = _serviceProvider.CreateScope();
-        var handler = sp.ServiceProvider.GetRequiredService<THandler>();
+        var handler = sp.ServiceProvider.GetRequiredService<ICodeFirstCloudHandlerPipeline<THandler, IServiceBusMessage>>();
 
-        await handler.ProcessMessageAsync(new RabbitMqServiceBusMessage(basicDeliverEventArgs), CancellationToken.None);
+        await handler.HandleAsync(new RabbitMqServiceBusMessage(basicDeliverEventArgs), CancellationToken.None);
     }
 }

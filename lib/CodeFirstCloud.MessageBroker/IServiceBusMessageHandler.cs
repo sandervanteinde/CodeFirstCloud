@@ -1,6 +1,5 @@
 ﻿namespace CodeFirstCloud.MessageBroker;
 
-public interface IServiceBusMessageHandler
+public interface IServiceBusMessageHandler : ICodeFirstCloudHandler<IServiceBusMessage>
 {
-    Task ProcessMessageAsync(IServiceBusMessage serviceBusMessage, CancellationToken cancellationToken);
 }

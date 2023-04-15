@@ -37,6 +37,12 @@ public class CodeFirstCloudHostBuilder : ICodeFirstCloudHostBuilder
         _hostBuilder.Services.AddHostedService<HandlerBindingRunner<TBinding>>();
     }
 
+    public void AddBindingInterceptor<TInterceptor>()
+        where TInterceptor : class, ICodeFirstCloudBindingInterceptor
+    {
+        _hostBuilder.Services.AddTransient<ICodeFirstCloudBindingInterceptor, TInterceptor>();
+    }
+
     public void Use(Action<WebApplication> appRegistration)
     {
         MiddlewareRegistrations.Add(appRegistration);

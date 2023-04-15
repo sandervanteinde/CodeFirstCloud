@@ -5,7 +5,7 @@ public abstract class JsonServiceBusMessageHandler<TBody> : IServiceBusMessageHa
     private IServiceBusMessage? _message;
     protected IServiceBusMessage Message => _message ?? throw new InvalidOperationException("Message should have been filled prior to invoking inherited class.");
 
-    public async Task ProcessMessageAsync(IServiceBusMessage serviceBusMessage, CancellationToken cancellationToken)
+    public async Task HandleAsync(IServiceBusMessage serviceBusMessage, CancellationToken cancellationToken)
     {
         _message = serviceBusMessage;
 
@@ -19,6 +19,7 @@ public abstract class JsonServiceBusMessageHandler<TBody> : IServiceBusMessageHa
             _message = null;
         }
     }
+
 
     protected abstract Task ProcessTypedMessageAsync(TBody body, CancellationToken cancellationToken);
 }

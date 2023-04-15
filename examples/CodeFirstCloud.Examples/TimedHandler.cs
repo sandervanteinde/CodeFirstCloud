@@ -13,7 +13,7 @@ public class TimedHandler : ITimerHandler
         _logger = logger;
     }
 
-    public Task ExecuteAsync(CancellationToken cancellationToken)
+    public Task HandleAsync(CancellationToken cancellationToken)
     {
         _logger.LogInformation("Current Time {Time}", DateTime.UtcNow);
         return Task.CompletedTask;

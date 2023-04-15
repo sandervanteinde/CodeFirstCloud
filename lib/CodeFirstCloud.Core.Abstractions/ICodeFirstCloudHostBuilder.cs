@@ -11,5 +11,8 @@ public interface ICodeFirstCloudHostBuilder
     void AddBinding<TBinding>()
         where TBinding : class, ICodeFirstCloudBinding;
 
+    void AddBindingInterceptor<TInterceptor>()
+        where TInterceptor : class, ICodeFirstCloudBindingInterceptor;
+
     void Use(Action<WebApplication> app);
 }

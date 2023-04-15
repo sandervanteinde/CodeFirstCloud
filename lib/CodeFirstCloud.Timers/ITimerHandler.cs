@@ -1,6 +1,5 @@
 ﻿namespace CodeFirstCloud.Timers;
 
-public interface ITimerHandler
+public interface ITimerHandler : ICodeFirstCloudHandler
 {
-    Task ExecuteAsync(CancellationToken cancellationToken);
 }

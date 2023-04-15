@@ -1,13 +1,10 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using NCrontab;
 using System.Reflection;
 
 namespace CodeFirstCloud.Timers.InProcess;
 
-public class TimerCodeFirstCloudBinding<THandler> : ICodeFirstCloudBinding, IInvokableInDevelopment
+public class TimerCodeFirstCloudBinding<THandler> : ICodeFirstCloudBinding
     where THandler : ITimerHandler
 {
     private readonly string _cronExpression;
@@ -59,16 +56,7 @@ public class TimerCodeFirstCloudBinding<THandler> : ICodeFirstCloudBinding, IInv
     private async Task FireNextEvent(CancellationToken cancellationToken)
     {
         using var sp = _serviceProvider.CreateScope();
-        var handler = sp.ServiceProvider.GetRequiredService<THandler>();
-        await handler.ExecuteAsync(cancellationToken);
-    }
-
-    static void IInvokableInDevelopment.AddEndpoint(WebApplication app)
-    {
-        app.MapPost($"/invoke-timer/{typeof(THandler).Name}", async ([FromServices] THandler handler, CancellationToken cancellationToken) =>
-        {
-            await handler.ExecuteAsync(cancellationToken);
-        })
-           .WithTags("Timers");
+        var handler = sp.ServiceProvider.GetRequiredService<ICodeFirstCloudHandlerPipeline<THandler>>();
+        await handler.HandleAsync(cancellationToken);
     }
 }
