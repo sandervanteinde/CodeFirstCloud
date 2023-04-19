@@ -29,7 +29,7 @@ public static class AzureServiceBusCodeFirstHostBuilderExtensions
                    .WithCredential(sp => sp.GetRequiredService<TokenCredential>());
             });
 
-        foreach (var (item, _) in assembly.ScanForHandlerWithAttribute<IServiceBusMessageHandler, ServiceBusHandlerAttribute>())
+        foreach (var (item, _) in assembly.ScanForClassesWithAttribute<IServiceBusMessageHandler, ServiceBusHandlerAttribute>())
         {
             var bindingType = typeof(ServiceBusSubscriptionListenerCodeFirstCloudBinding<>).MakeGenericType(item);
             builder.AddBinding(bindingType);

@@ -27,7 +27,11 @@ public static class SwaggerCodeFirstHostBuilderExtensions
                 app
             };
 
-            foreach (var service in services.Select(service => service.ImplementationType).Where(type => type is not null))
+            var servicesOfType = services
+               .Where(service => service.ImplementationType is not null)
+               .Select(service => service.ImplementationType!);
+
+            foreach (var service in servicesOfType)
             {
                 MethodInfo? registerMethod = null;
 

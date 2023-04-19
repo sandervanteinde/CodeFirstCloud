@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace CodeFirstCloud.MessageBroker.Azure;
 
-internal sealed class ServiceBusSubscriptionListenerCodeFirstCloudBinding<THandler> : BaseMessageBrokerBinding<THandler>, ICodeFirstCloudBinding, IAsyncDisposable
+internal sealed class ServiceBusSubscriptionListenerCodeFirstCloudBinding<THandler> : ICodeFirstCloudBinding, IAsyncDisposable
     where THandler : IServiceBusMessageHandler
 {
     private readonly ILogger<THandler> _logger;

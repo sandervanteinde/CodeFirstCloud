@@ -6,6 +6,8 @@ internal sealed class ExceptionBindingInterceptor : ICodeFirstCloudBindingInterc
 {
     private readonly ILogger<ExceptionBindingInterceptor> _logger;
     private readonly TimeSpan _timeBetweenAttempts = TimeSpan.FromSeconds(5);
+    private const string OperationStart = "start";
+    private const string OperationExecute = "execute";
 
     public ExceptionBindingInterceptor(ILogger<ExceptionBindingInterceptor> logger)
     {
@@ -14,12 +16,12 @@ internal sealed class ExceptionBindingInterceptor : ICodeFirstCloudBindingInterc
 
     public async Task StartAsync(Func<BindingInterceptorContext, Task> next, BindingInterceptorContext context)
     {
-        await WrapInTryCatch(next, context, "start");
+        await WrapInTryCatch(next, context, OperationStart);
     }
 
     public async Task ExecuteAsync(Func<BindingInterceptorContext, Task> next, BindingInterceptorContext context)
     {
-        await WrapInTryCatch(next, context, "execute");
+        await WrapInTryCatch(next, context, OperationExecute);
     }
 
     public async Task StopAsync(Func<BindingInterceptorContext, Task> next, BindingInterceptorContext context)
@@ -43,7 +45,7 @@ internal sealed class ExceptionBindingInterceptor : ICodeFirstCloudBindingInterc
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "Failed to {OperationName} binding {BindingName}. Trying again after {TimeInMilliseconds}ms.", operation, context.ActualBinding.GetType().Name, _timeBetweenAttempts.TotalMilliseconds);
+                _logger.LogWarning(ex, "Failed to {OperationName} binding {BindingName}. Trying again after {TimeInMilliseconds}ms", operation, context.ActualBinding.GetType().Name, _timeBetweenAttempts.TotalMilliseconds);
             }
 
             await Task.Delay(_timeBetweenAttempts);

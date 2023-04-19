@@ -121,11 +121,11 @@ internal class HandlerBindingRunner<TBinding> : BackgroundService
         return interceptors
            .Reverse()
            .Aggregate(
-                (Func<BindingInterceptorContext, Task>)Seed,
+                Seed,
                 (prev, next) =>
                 {
                     var nextMethod = interceptorFunc.Invoke(next);
-                    return async ct => { await nextMethod.Invoke(prev, ct); };
+                    return async ct => await nextMethod.Invoke(prev, ct);
                 }
             );
 

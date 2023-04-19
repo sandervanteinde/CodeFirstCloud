@@ -7,11 +7,8 @@ namespace CodeFirstCloud;
 
 public static class CodeFirstCloudHost
 {
-    public static IHost Create(Action<ICodeFirstCloudHostBuilder> codeFirstHostBuilderFn)
+    public static void AddCodeFirstCloud(this WebApplicationBuilder builder, Action<ICodeFirstCloudHostBuilder> codeFirstHostBuilderFn)
     {
-        var builder = WebApplication.CreateBuilder();
-
-
         var codeFirstHostBuilder = new CodeFirstCloudHostBuilder(builder);
         codeFirstHostBuilderFn.Invoke(codeFirstHostBuilder);
         builder.Services.AddTransient(typeof(ICodeFirstCloudHandlerPipeline<>), typeof(DefaultCodeFirstCloudHandlerPipeline<>));
@@ -19,13 +16,25 @@ public static class CodeFirstCloudHost
         builder.Services.AddTransient(typeof(ICodeFirstCloudHandlerPipeline<,,>), typeof(DefaultCodeFirstCloudHandlerPipeline<,,>));
         builder.Services.AddTransient(typeof(ICodeFirstCloudHandlerPipeline<,,,>), typeof(DefaultCodeFirstCloudHandlerPipeline<,,,>));
         codeFirstHostBuilder.AddBindingInterceptor<ExceptionBindingInterceptor>();
+        builder.Services.AddSingleton(codeFirstHostBuilder);
+    }
 
-        var app = builder.Build();
-
+    public static void UseCodeFirstCloud(this WebApplication webApplication)
+    {
+        var codeFirstHostBuilder = webApplication.Services.GetRequiredService<CodeFirstCloudHostBuilder>();
         foreach (var middlewareRegistration in codeFirstHostBuilder.MiddlewareRegistrations)
         {
-            middlewareRegistration.Invoke(app);
+            middlewareRegistration.Invoke(webApplication);
         }
+    }
+    public static IHost Create(Action<ICodeFirstCloudHostBuilder> codeFirstHostBuilderFn)
+    {
+        var builder = WebApplication.CreateBuilder();
+        builder.AddCodeFirstCloud(codeFirstHostBuilderFn);
+
+        var app = builder.Build();
+        
+        app.UseCodeFirstCloud();
 
         return app;
     }

@@ -14,7 +14,7 @@ public static class TimerCodeFirstHostBuilderExtensions
         var entryAssembly = Assembly.GetEntryAssembly()
                             ?? throw new InvalidOperationException("No entry assembly found");
 
-        foreach (var (handler, attr) in entryAssembly.ScanForHandlerWithAttribute<ITimerHandler, TimerAttribute>())
+        foreach (var (handler, attr) in entryAssembly.ScanForClassesWithAttribute<ITimerHandler, TimerAttribute>())
         {
             builder.AddBinding(typeof(TimerCodeFirstCloudBinding<>).MakeGenericType(handler));
             builder.Services.AddTransient(handler);

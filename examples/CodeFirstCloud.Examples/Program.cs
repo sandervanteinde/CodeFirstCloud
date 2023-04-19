@@ -1,11 +1,19 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using CodeFirstCloud;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 
-var host = CodeFirstCloudHost.Create(builder =>
-    builder.AddTimerHandlerFromEntryAssembly()
+var builder = WebApplication.CreateBuilder();
+
+builder.AddCodeFirstCloud(codeFirstCloudBuilder =>
+    codeFirstCloudBuilder.AddTimerHandlerFromEntryAssembly()
        .AddAzureServiceBusMessageHandlersFromEntryAssembly("sander-testing-servicebus")
        .AddDevelopmentSwagger());
 
-await host.RunAsync();
+var app = builder.Build();
+
+app.UseCodeFirstCloud();
+
+await app.RunAsync();
+

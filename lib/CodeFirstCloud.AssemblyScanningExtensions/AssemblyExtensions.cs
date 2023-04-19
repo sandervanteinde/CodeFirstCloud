@@ -4,26 +4,26 @@ namespace CodeFirstCloud.AssemblyScanningExtensions;
 
 public static class AssemblyExtensions
 {
-    public static IEnumerable<(Type, TAttribute)> ScanForHandlerWithAttribute<THandler, TAttribute>(this Assembly assembly)
+    public static IEnumerable<(Type, TAttribute)> ScanForClassesWithAttribute<TClass, TAttribute>(this Assembly assembly)
         where TAttribute : Attribute
     {
-        var handlerType = typeof(THandler);
+        var classType = typeof(TClass);
 
-        foreach (var item in assembly.GetTypes())
+        foreach (var type in assembly.GetTypes())
         {
-            if (!item.IsAssignableTo(handlerType))
+            if (!type.IsAssignableTo(classType))
             {
                 continue;
             }
 
-            var attr = item.GetCustomAttribute<TAttribute>();
+            var attribute = type.GetCustomAttribute<TAttribute>();
 
-            if (attr is null)
+            if (attribute is null)
             {
-                throw new InvalidOperationException($"Type {item.Name} is extending {handlerType} but is not decorated with {typeof(TAttribute)}.");
+                throw new InvalidOperationException($"Type {type.Name} is extending {classType} but is not decorated with {typeof(TAttribute)}.");
             }
 
-            yield return (item, attr);
+            yield return (type, attribute);
         }
     }
 }
