@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using CodeFirstCloud.AssemblyScanningExtensions;
+using CodeFirstCloud.Constructable;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 // ReSharper disable once CheckNamespace
@@ -39,11 +41,20 @@ public static class SwaggerCodeFirstHostBuilderExtensions
                 {
                     registerMethod = method.MakeGenericMethod(service);
                 }
-                else if (IsAssignableToGenericType(service, typeof(ICodeFirstCloudHandler<>), out var @interface))
+                else if (service.IsAssignableToGenericType(typeof(ICodeFirstCloudHandler<>), out var @interface))
                 {
-                    registerMethod = typeof(SwaggerCodeFirstHostBuilderExtensions)
-                       .GetMethod(nameof(AddInvokableAsEndpointWithOneArg), BindingFlags.Static | BindingFlags.NonPublic)!
-                       .MakeGenericMethod(service, @interface.GetGenericArguments()[0]);
+                    if (service.IsAssignableToGenericType(typeof(IConstructable<,>), out var constructable) && constructable.GetGenericArguments()[1] == @interface.GetGenericArguments()[0])
+                    {
+                        registerMethod = typeof(SwaggerCodeFirstHostBuilderExtensions)
+                           .GetMethod(nameof(AddInvokableAsEndpointWithConstructable), BindingFlags.Static | BindingFlags.NonPublic)!
+                           .MakeGenericMethod(service, @interface.GetGenericArguments()[0], constructable.GetGenericArguments()[0]);
+                    }
+                    else
+                    {
+                        registerMethod = typeof(SwaggerCodeFirstHostBuilderExtensions)
+                           .GetMethod(nameof(AddInvokableAsEndpointWithOneArg), BindingFlags.Static | BindingFlags.NonPublic)!
+                           .MakeGenericMethod(service, @interface.GetGenericArguments()[0]);
+                    }
                 }
 
                 registerMethod?.Invoke(null, parameters);
@@ -52,52 +63,33 @@ public static class SwaggerCodeFirstHostBuilderExtensions
         return builder;
     }
 
-    private static void AddInvokableAsEndpointWithoutArgs<TInvokable>(WebApplication app)
+    private static void AddInvokableAsEndpointWithoutArgs<TInvokable>(IEndpointRouteBuilder app)
         where TInvokable : ICodeFirstCloudHandler
     {
         var path = ParseClassAsRoute(typeof(TInvokable));
         app.MapPost(path, async ([FromServices] ICodeFirstCloudHandlerPipeline<TInvokable> pipeline, CancellationToken cancellationToken) => await pipeline.HandleAsync(cancellationToken));
     }
 
-    private static void AddInvokableAsEndpointWithOneArg<TInvokable, T1>(WebApplication app)
+    private static void AddInvokableAsEndpointWithOneArg<TInvokable, T1>(IEndpointRouteBuilder app)
         where TInvokable : ICodeFirstCloudHandler<T1>
     {
         var path = ParseClassAsRoute(typeof(TInvokable));
         app.MapPost(path, async ([FromServices] ICodeFirstCloudHandlerPipeline<TInvokable, T1> pipeline, [FromBody] T1 body, CancellationToken cancellationToken) => await pipeline.HandleAsync(body, cancellationToken));
     }
 
+    private static void AddInvokableAsEndpointWithConstructable<TInvokable, T1, TBody>(IEndpointRouteBuilder app)
+        where TInvokable : ICodeFirstCloudHandler<T1>, IConstructable<TBody, T1>
+    {
+        var path = ParseClassAsRoute(typeof(TInvokable));
+        app.MapPost(path, async ([FromServices] ICodeFirstCloudHandlerPipeline<TInvokable, T1> pipeline, [FromBody] TBody body, CancellationToken cancellationToken) =>
+        {
+            var asT1 = TInvokable.CreateTestable(body);
+            await pipeline.HandleAsync(asT1, cancellationToken);
+        });
+    }
+
     private static string ParseClassAsRoute(Type type)
     {
         return $"/{type.Namespace?.Replace('.', '/') ?? "RootNamespace"}/{type.Name}";
-    }
-
-    private static bool IsAssignableToGenericType(Type givenType, Type genericType, [NotNullWhen(true)] out Type? @interface)
-    {
-        @interface = null;
-        var interfaceTypes = givenType.GetInterfaces();
-
-        foreach (var it in interfaceTypes)
-        {
-            if (it.IsGenericType && it.GetGenericTypeDefinition() == genericType)
-            {
-                @interface = it;
-                return true;
-            }
-        }
-
-        if (givenType.IsGenericType && givenType.GetGenericTypeDefinition() == genericType)
-        {
-            @interface = givenType;
-            return true;
-        }
-
-        var baseType = givenType.BaseType;
-
-        if (baseType == null)
-        {
-            return false;
-        }
-
-        return IsAssignableToGenericType(baseType, genericType, out @interface);
     }
 }

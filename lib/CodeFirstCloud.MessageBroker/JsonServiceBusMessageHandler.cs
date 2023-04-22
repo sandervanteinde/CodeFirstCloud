@@ -1,9 +1,16 @@
+using CodeFirstCloud.Constructable;
+
 namespace CodeFirstCloud.MessageBroker;
 
-public abstract class JsonServiceBusMessageHandler<TBody> : IServiceBusMessageHandler
+public abstract class JsonServiceBusMessageHandler<TBody> : IServiceBusMessageHandler, IConstructable<TBody, IServiceBusMessage>
 {
     private IServiceBusMessage? _message;
     protected IServiceBusMessage Message => _message ?? throw new InvalidOperationException("Message should have been filled prior to invoking inherited class.");
+
+    public static IServiceBusMessage CreateTestable(TBody input)
+    {
+        return new TestingServiceBusMessage(input!);
+    }
 
     public async Task HandleAsync(IServiceBusMessage serviceBusMessage, CancellationToken cancellationToken)
     {
